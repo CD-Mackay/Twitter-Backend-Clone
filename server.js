@@ -11,6 +11,22 @@ app.use(cookieSession({
 
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
+  if (req.session) {
+    console.log(req.session);
+  }
   res.render('home');
 })
+
+app.post('/register', (req, res) => {
+  console.log(req.body);
+  console.log(res);
+  req.session.user = req.body.name;
+  res.redirect('/home');
+})
+
+
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}!`);
+});
