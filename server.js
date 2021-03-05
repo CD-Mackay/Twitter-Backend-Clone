@@ -23,6 +23,17 @@ app.post('/register', (req, res) => {
   console.log(res);
   req.session.user = req.body.name;
   res.redirect('/home');
+});
+
+app.post('/logout', (req, res) => {
+  res.clearCookie('name');
+  req.session = null;
+  res.redirect('/home');
+});
+
+app.post('/login', (req, res) => {
+  req.session.user = req.body.name;
+  res.redirect('/home');
 })
 
 
