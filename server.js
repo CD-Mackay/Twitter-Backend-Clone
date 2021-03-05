@@ -43,13 +43,18 @@ app.post('/register', (req, res) => {
   pool.query('SELECT * FROM users where name = $1', [req.body.name])
   .then(data => {
     console.log("data", data.rows);
-    if (data.rows.name == req.body.name) {
-      console.log('error, user already exists');
+    console.log("name1", data.rows[0].name)
+    console.log("name2", req.body.name);
+    if (data.rows[0].name == req.body.name) {
+      res.render('<div>Error, user already exists </div>');
     } else {
       pool.query(`INSERT INTO users (name, password) VALUES ($1, $2)`, [req.body.name, req.body.password]);
       req.session.user = req.body.name;
       res.redirect('/home');
     }
+  })
+  .catch(err => {
+    console.log(err);
   })
 });
 
@@ -69,7 +74,6 @@ app.post('/login', (req, res) => {
       res.render('<div>Error, invalid password </div>');
     }
   })
-  
 })
 
 app.listen(port, () => {
