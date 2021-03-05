@@ -46,7 +46,7 @@ app.post('/register', (req, res) => {
     console.log("name1", data.rows[0].name)
     console.log("name2", req.body.name);
     if (data.rows[0].name == req.body.name) {
-      res.render('<div>Error, user already exists </div>');
+      res.json('<div>Error, user already exists </div>');
     } else {
       pool.query(`INSERT INTO users (name, password) VALUES ($1, $2)`, [req.body.name, req.body.password]);
       req.session.user = req.body.name;
@@ -71,10 +71,28 @@ app.post('/login', (req, res) => {
       req.session.user = req.body.name;
       res.redirect('/home');
     } else {
-      res.render('<div>Error, invalid password </div>');
+      res.json('<div>Error, invalid password </div>');
     }
   })
-})
+});
+
+app.get('/tweets', (req, res) => {
+  pool.query(`SELECT * FROM tweets`)
+  .then(data => {
+    const templateVars = data.rows;
+    res.redirect('/home', { templateVars });
+  })
+});
+
+app.post('/tweets', (req, res) => {
+  pool.query(`INSERT INTO tweets(text, author)`, [req.body.text, req.session.user])
+  .then(() => {
+    res.redirect('/home');
+  })
+  .catch(err => {
+    console.log(err);
+  })
+});
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}!`);
