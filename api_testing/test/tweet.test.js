@@ -38,16 +38,16 @@ describe('tweet', function() {
     })
   })
 
-  it('should delete tweets, selected by id', () => {
-    chai.request("http://localhost:3000")
-    .delete(`/tweets/${8}`)
-    .type('form')
-    .send({ '_method': 'delete' , 'id': '8'})
-    .end(function (err, res) {
-      expect(res).to.have.status(200)
+  // it('should delete tweets, selected by id', () => {
+  //   chai.request("http://localhost:3000")
+  //   .delete(`/tweets/${8}`)
+  //   .type('form')
+  //   .send({ '_method': 'delete' , 'id': '8'})
+  //   .end(function (err, res) {
+  //     expect(res).to.have.status(200)
      
-    })
-  })
+  //   })
+  // })
 
   it ('should modify selected tweets', () => {
     chai.request("http://localhost:3000")
@@ -60,6 +60,14 @@ describe('tweet', function() {
     })
     .end(function (err, res) {
       expect(res).to.have.status(200);
+    })
+  })
+
+  it('should display all posted tweets', () => {
+    chai.request("http://localhost:3000")
+    .get('/tweets')
+    .end(function (err, res) {
+      expect(res.text).to.contain(`tweet tweeting`)
     })
   })
 })

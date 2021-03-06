@@ -56,10 +56,7 @@ app.set('view engine', 'ejs');
 
 // Login/Logout/User Registration
 app.get('/home', (req, res) => {
-  if (req.session) {
-    console.log("session!: ", req.session);
-  }
-  res.render('home');
+  res.json('sample api')
 })
 
 app.post('/register', (req, res) => {
