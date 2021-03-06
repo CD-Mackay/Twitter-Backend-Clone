@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const port = 3000;
 const { Pool } = require('pg');
+const WebSocket = require('ws');
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: true}));
@@ -10,12 +11,32 @@ app.use(cookieSession({
   keys: ['key1']
 }));
 
+// Basic implementation of a global chat websocket
+const SocketServer = new WebSocket.Server({ port: 3002 })
+
+SocketServer.on('connection', webSocket => {
+  webSocket.on('message', message => {
+    console.log('message recieved:', message);
+    broadcast(message);
+  })
+})
+
+function broadcast(data) {
+  webSocketServer.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(data);
+    }
+  })
+}
+// End Websocket
+
+
 const pool = new Pool ({
   host: 'localhost',
   user: 'connormackay',
   database: 'speer_api'
 });
-
+// Configure pool
 pool.connect((err, client, release) => {
   if (err) {
     return console.error('error acquiring client', err.stack);
@@ -25,12 +46,14 @@ pool.connect((err, client, release) => {
     if (err) { 
       return console.error('error executing query', err.stack)
     }
-    //console.log(result.rows);
+    console.log(result.rows);
   })
 });
 
 app.set('view engine', 'ejs');
 
+
+// Login/Logout/User Registration
 app.get('/home', (req, res) => {
   if (req.session) {
     console.log("session!: ", req.session);
@@ -76,7 +99,7 @@ app.post('/login', (req, res) => {
   })
 });
 
-
+// CRUD routing for tweets
 app.post('/tweets', (req, res) => {
   console.log("posted tweet = ", req.body);
   const content = req.body.content;

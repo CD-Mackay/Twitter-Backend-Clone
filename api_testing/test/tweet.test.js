@@ -7,7 +7,6 @@ const baseUrl = "http://localhost:3000";
 const agent = chai.request.agent("http://localhost:3000");
 
 chai.use(chaiHttp);
-const sessionId = {"user": 'test'};
 
 describe('tweet', function() {
   it('should attach the users id to the tweet', () => {
@@ -27,13 +26,23 @@ describe('tweet', function() {
       })
     })
   })
-  it('should post tweets and save them to database', () => {
+  // it('should post tweets and save them to database', () => {
+  //   chai.request("http://localhost:3000")
+  //   .post('/tweets')
+  //   .type('form')
+  //   .send({ 'content':'a testing tweet' })
+  //   .end(function (err, res) {
+  //     expect(res).to.have.status(200);
+  //   })
+  // })
+
+  it('should delete tweets, selected by id', () => {
     chai.request("http://localhost:3000")
-    .post('/tweets')
+    .post(`/tweets/:id/delete`)
     .type('form')
-    .send({ 'content':'a testing tweet' })
+    .send({ '_method': 'post', 'id': '8'})
     .end(function (err, res) {
-      expect(res).to.have.status(200);
+      console.log(res);
     })
   })
 })
