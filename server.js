@@ -1,10 +1,12 @@
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const { Pool } = require('pg');
 const WebSocket = require('ws');
 const cookieSession = require('cookie-session');
 const bodyParser = require('body-parser');
+const user = process.env.PGUSER || 'connormackay';
+const database = process.env.PGDATABASE || 'speer_api';
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
   name: 'session',
@@ -31,11 +33,11 @@ function broadcast(data) {
 // End Websocket
 
 
-// Configure pool
+// Configure pool 
 const pool = new Pool ({
   host: 'localhost',
-  user: 'connormackay',
-  database: 'speer_api'
+  user: user,
+  database: database
 });
 
 pool.connect((err, client, release) => {

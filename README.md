@@ -14,5 +14,8 @@
 ### Setup
 
 - To run the project run npm install to install dependencies
+- Create a .env file and populate it with the appropriate port and postgres database. 
 - From within the root folder, run 'npm start' to begin the server
 - From the 'api_testing' folder, run 'npm test' to begin tests. 
+
+
