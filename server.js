@@ -120,6 +120,16 @@ app.delete('tweets/:id', (req, res) => {
   })
 })
 
+app.put('tweets/:id', (req, res) => {
+  pool.query(`UPDATE tweets SET content = $1 where id = $2`, [req.body.content, req.body.id])
+  .then(() => {
+    res.redirect('/home');
+  })
+  .catch(err => {
+    console.log(err);
+  })
+})
+
 app.get('/tweets', (req, res) => {
   pool.query('SELECT * FROM tweets')
   .then(data => {
