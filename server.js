@@ -31,12 +31,13 @@ function broadcast(data) {
 // End Websocket
 
 
+// Configure pool
 const pool = new Pool ({
   host: 'localhost',
   user: 'connormackay',
   database: 'speer_api'
 });
-// Configure pool
+
 pool.connect((err, client, release) => {
   if (err) {
     return console.error('error acquiring client', err.stack);
@@ -103,7 +104,7 @@ app.post('/login', (req, res) => {
 app.post('/tweets', (req, res) => {
   console.log("posted tweet = ", req.body);
   const content = req.body.content;
-  const author = req.session.user;
+  const author = req.body.user;
   pool.query(`INSERT INTO tweets(content, author) VALUES ($1, $2)`, [content, author])
   .then(() => {
     res.redirect('/home');
@@ -113,14 +114,16 @@ app.post('/tweets', (req, res) => {
   })
 });
 
-app.delete('tweets/:id', (req, res) => {
+app.delete('/tweets/:id', (req, res) => {
+  console.log('deleteing', req.params);
   pool.query(`DELETE FROM tweets WHERE id = $1`, [req.params.id])
   .then(() => {
     res.redirect('/home');
   })
 })
 
-app.put('tweets/:id', (req, res) => {
+app.put('/tweets/:id', (req, res) => {
+  console.log("modifying a tweet!")
   pool.query(`UPDATE tweets SET content = $1 where id = $2`, [req.body.content, req.body.id])
   .then(() => {
     res.redirect('/home');
