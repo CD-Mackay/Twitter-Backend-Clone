@@ -113,8 +113,8 @@ app.post('/tweets', (req, res) => {
   })
 });
 
-app.post('tweets/:id/delete', (req, res) => {
-  pool.query(`DELETE FROM tweets WHERE id = $1`, [req.body.id])
+app.delete('tweets/:id', (req, res) => {
+  pool.query(`DELETE FROM tweets WHERE id = $1`, [req.params.id])
   .then(() => {
     res.redirect('/home');
   })

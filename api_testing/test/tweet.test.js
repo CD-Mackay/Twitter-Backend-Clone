@@ -22,7 +22,9 @@ describe('tweet', function() {
       expect(res).to.have.cookie('session');
       return agent.get('/user/testing')
       .then(function (res) {
+        console.log(res);
         expect(res).to.have.status(200);
+        done();
       })
     })
   })
@@ -38,11 +40,11 @@ describe('tweet', function() {
 
   it('should delete tweets, selected by id', () => {
     chai.request("http://localhost:3000")
-    .post(`/tweets/:id/delete`)
+    .delete(`/tweets/${8}`)
     .type('form')
-    .send({ '_method': 'post', 'id': '8'})
+    .send({ '_method': 'delete' , 'id': '8'})
     .end(function (err, res) {
-      console.log(res);
+     console.log(res);
     })
   })
 })

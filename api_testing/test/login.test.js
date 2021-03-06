@@ -9,14 +9,6 @@ chai.use(chaiHttp);
 
 describe('login', function(){
 
-  it ('should access the home page', () => {
-    chai.request("http://localhost:3000")
-    .get('/home')
-    .end(function (err, res) {
-      expect(res).to.have.status(200);
-    });
-  })
-
   it ('should login a user who exists within the database', () => {
     chai.request("http://localhost:3000")
     .post('/login')
@@ -27,7 +19,7 @@ describe('login', function(){
       'password': 'test'
     })
     .end(function (err, res) {
-    //  expect(res).to.have.cookie('session');
+      expect(res).to.have.status(200);
     })
   })
 
