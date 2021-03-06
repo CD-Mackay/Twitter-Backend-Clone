@@ -25,7 +25,7 @@ pool.connect((err, client, release) => {
     if (err) { 
       return console.error('error executing query', err.stack)
     }
-    console.log(result.rows);
+    //console.log(result.rows);
   })
 });
 
@@ -33,7 +33,7 @@ app.set('view engine', 'ejs');
 
 app.get('/home', (req, res) => {
   if (req.session) {
-    console.log(req.session);
+    console.log("session!: ", req.session);
   }
   res.render('home');
 })
@@ -89,6 +89,13 @@ app.post('/tweets', (req, res) => {
     console.log("Tweeting error: ", err);
   })
 });
+
+app.post('tweets/:id/delete', (req, res) => {
+  pool.query(`DELETE FROM tweets WHERE id = $1`, [req.body.id])
+  .then(() => {
+    res.redirect('/home');
+  })
+})
 
 app.get('/tweets', (req, res) => {
   pool.query('SELECT * FROM tweets')
